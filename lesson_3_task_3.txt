@@ -1,0 +1,13 @@
+profiles
+-переименовать photo_id в media_id
+
+messages
+-добавить признак прочтения is_read DATETIME
+-добавить media JSON: храним список media_id сами файлы храним в таблице media
+
+friendship
+-убрать requested_at: избыточность, есть created_at
+-добавить stopped_at DATETIME: прекращение дружбы (возможно и удаление записи о дружбе, в зависимости от логики приложения)
+
+communities
+-аналогично с friendship - удаляем или делаем "неактивной", если второе - то добавляем stopped_at DATETIME
