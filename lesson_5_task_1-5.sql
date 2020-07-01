@@ -20,6 +20,4 @@ INSERT INTO catalogs VALUES
   (NULL, 'Жесткие диски'),
   (NULL, 'Оперативная память');
 
-SELECT * FROM catalogs WHERE id IN (5, 1, 2);
-
 SELECT * FROM catalogs WHERE id IN (5, 1, 2) ORDER BY FIELD(id, 5, 1, 2);

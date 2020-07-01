@@ -24,9 +24,5 @@ INSERT INTO storehouses_products (storehouse_id, product_id, value) VALUES
  (1, 826, 30),
  (1, 719, 500),
  (1, 638, 1);
- 
-SELECT * FROM storehouses_products ORDER BY value;
-
-SELECT id, value, IF(value > 0, 0, 1) AS sort FROM storehouses_products ORDER BY value;
 
 SELECT * FROM storehouses_products ORDER BY IF(value > 0, 0, 1), value;

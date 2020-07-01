@@ -23,6 +23,6 @@ INSERT INTO users (name, birthday_at, created_at, updated_at) VALUES
   ('Иван', '1998-01-12', NULL, NULL),
   ('Мария', '2006-08-29', NULL, NULL);
   
-SELECT * FROM users;
+/*SELECT * FROM users;*/
 
 UPDATE users SET created_at = NOW(), updated_at = NOW();

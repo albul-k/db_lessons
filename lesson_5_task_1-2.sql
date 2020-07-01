@@ -23,15 +23,11 @@ INSERT INTO users (name, birthday_at, created_at, updated_at) VALUES
   ('Иван', '1998-01-12', '09.05.2000 10:44', '09.05.2000 10:44'),
   ('Мария', '2006-08-29', '11.06.2000 10:55', '11.06.2000 10:55');
 
-SELECT STR_TO_DATE(created_at, '%d.%m.%Y %k:%i') FROM users;
-
 UPDATE users SET
  created_at = STR_TO_DATE(created_at, '%d.%m.%Y %k:%i'),
  updated_at = STR_TO_DATE(updated_at, '%d.%m.%Y %k:%i');
 
-SELECT * FROM users;
-
-DESCRIBE users;
+/*SELECT * FROM users;*/
 
 ALTER TABLE users CHANGE
  created_at created_at DATETIME DEFAULT CURRENT_TIMESTAMP;
