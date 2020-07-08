@@ -1,10 +1,10 @@
--- добавить признак прочтения is_read DATETIME
+-- РґРѕР±Р°РІРёС‚СЊ РїСЂРёР·РЅР°Рє РїСЂРѕС‡С‚РµРЅРёСЏ is_read DATETIME
 ALTER TABLE messages ADD COLUMN is_read DATETIME;
 
--- убрать requested_at: избыточность, есть created_at
+-- СѓР±СЂР°С‚СЊ requested_at: РёР·Р±С‹С‚РѕС‡РЅРѕСЃС‚СЊ, РµСЃС‚СЊ created_at
 ALTER TABLE friendship DROP COLUMN requested_At;
 
--- Таблица лайков
+-- РўР°Р±Р»РёС†Р° Р»Р°Р№РєРѕРІ
 DROP TABLE IF EXISTS likes;
 CREATE TABLE likes (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -14,7 +14,7 @@ CREATE TABLE likes (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Таблица типов лайков
+-- РўР°Р±Р»РёС†Р° С‚РёРїРѕРІ Р»Р°Р№РєРѕРІ
 DROP TABLE IF EXISTS target_types;
 CREATE TABLE target_types (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -28,7 +28,7 @@ INSERT INTO target_types (name) VALUES
   ('media'),
   ('posts');
 
--- Заполняем лайки
+-- Р—Р°РїРѕР»РЅСЏРµРј Р»Р°Р№РєРё
 INSERT INTO likes 
   SELECT 
     id, 
@@ -38,10 +38,10 @@ INSERT INTO likes
     CURRENT_TIMESTAMP 
   FROM messages;
 
--- Проверим
+-- РџСЂРѕРІРµСЂРёРј
 SELECT * FROM likes LIMIT 10;
 
--- Создадим таблицу постов
+-- РЎРѕР·РґР°РґРёРј С‚Р°Р±Р»РёС†Сѓ РїРѕСЃС‚РѕРІ
 CREATE TABLE posts (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   user_id INT UNSIGNED NOT NULL,
@@ -64,7 +64,7 @@ UPDATE posts SET
 
 SELECT * FROM posts LIMIT 10;
 
--- Таблица profiles
+-- РўР°Р±Р»РёС†Р° profiles
 DESC profiles;
 ALTER TABLE profiles
 	ADD CONSTRAINT profiles_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id)
@@ -72,31 +72,31 @@ ALTER TABLE profiles
 	ADD CONSTRAINT profiles_photo_id_fk FOREIGN KEY (photo_id) REFERENCES media(id)
 		ON DELETE SET NULL;
 
--- Таблица messages
+-- РўР°Р±Р»РёС†Р° messages
 DESC messages;
 ALTER TABLE messages
 	ADD CONSTRAINT messages_from_user_id_fk FOREIGN KEY (from_user_id) REFERENCES users(id),
 	ADD CONSTRAINT messages_to_user_id_fk FOREIGN KEY (to_user_id) REFERENCES users(id);
    
--- Таблица media
+-- РўР°Р±Р»РёС†Р° media
 DESC media;
 ALTER TABLE media
 	ADD CONSTRAINT media_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id),
 	ADD CONSTRAINT media_type_id_fk FOREIGN KEY (media_type_id) REFERENCES media_types(id);
     
--- Таблица communities_users
+-- РўР°Р±Р»РёС†Р° communities_users
 DESC communities_users;
 ALTER TABLE communities_users
 	ADD CONSTRAINT communities_users_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id),
 	ADD CONSTRAINT communities_users_type_id_fk FOREIGN KEY (community_id) REFERENCES communities(id);
     
--- Таблица friendship
+-- РўР°Р±Р»РёС†Р° friendship
 DESC friendship;
 ALTER TABLE friendship
 	ADD CONSTRAINT friendship_friend_id_fk FOREIGN KEY (friend_id) REFERENCES users(id),
 	ADD CONSTRAINT friendship_status_id_fk FOREIGN KEY (status_id) REFERENCES friendship_statuses(id);
     
--- Таблица likes
+-- РўР°Р±Р»РёС†Р° likes
 DESC likes;
 ALTER TABLE likes
 	ADD CONSTRAINT likes_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id),
@@ -106,7 +106,7 @@ ALTER TABLE likes
 ALTER TABLE likes
 	ADD CONSTRAINT likes_target_id_fk FOREIGN KEY (target_id) REFERENCES posts(id);
 
- -- Таблица posts
+ -- РўР°Р±Р»РёС†Р° posts
 DESC posts;
 ALTER TABLE posts
 	ADD CONSTRAINT posts_user_id_fk FOREIGN KEY (user_id) REFERENCES users(id),
