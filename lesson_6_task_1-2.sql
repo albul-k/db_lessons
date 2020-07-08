@@ -1,4 +1,4 @@
--- добавить признак прочтения is_read DATETIME
+﻿-- добавить признак прочтения is_read DATETIME
 ALTER TABLE messages ADD COLUMN is_read DATETIME;
 
 -- убрать requested_at: избыточность, есть created_at
