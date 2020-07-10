@@ -1,17 +1,17 @@
-/*
-1.	Составьте список пользователей users, которые осуществили хотя бы один заказ orders в интернет магазине.
+п»ї/*
+1.	РЎРѕСЃС‚Р°РІСЊС‚Рµ СЃРїРёСЃРѕРє РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ users, РєРѕС‚РѕСЂС‹Рµ РѕСЃСѓС‰РµСЃС‚РІРёР»Рё С…РѕС‚СЏ Р±С‹ РѕРґРёРЅ Р·Р°РєР°Р· orders РІ РёРЅС‚РµСЂРЅРµС‚ РјР°РіР°Р·РёРЅРµ.
 */
 
 SELECT * FROM users;
 SELECT * FROM orders;
 
--- добавим несколько заказов
+-- РґРѕР±Р°РІРёРј РЅРµСЃРєРѕР»СЊРєРѕ Р·Р°РєР°Р·РѕРІ
 INSERT INTO orders (user_id) VALUE (FLOOR(1 + (RAND() * 6)));
 INSERT INTO orders (user_id) VALUE (FLOOR(1 + (RAND() * 6)));
 INSERT INTO orders (user_id) VALUE (FLOOR(1 + (RAND() * 6)));
 INSERT INTO orders (user_id) VALUE (FLOOR(1 + (RAND() * 6)));
 INSERT INTO orders (user_id) VALUE (FLOOR(1 + (RAND() * 6)));
 
--- список пользователей которые сделали как минимум один заказ
+-- СЃРїРёСЃРѕРє РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ РєРѕС‚РѕСЂС‹Рµ СЃРґРµР»Р°Р»Рё РєР°Рє РјРёРЅРёРјСѓРј РѕРґРёРЅ Р·Р°РєР°Р·
 SELECT name, birthday_at FROM users
 	WHERE EXISTS (SELECT 1 FROM orders WHERE user_id = users.id);
