@@ -40,6 +40,11 @@ INSERT INTO flights (`from`,`to`) VALUES
 	('Bratislava','Brussels');
 
 SELECT
-	(SELECT name FROM cities WHERE `from` = cities.label) AS `from`,
-	(SELECT name FROM cities WHERE `to` = cities.label) AS `to`
-FROM flights
+	c1.name AS `from`,
+	c2.name AS `to`
+FROM
+	flights
+INNER JOIN cities AS c1 ON
+	`from` = c1.label
+INNER JOIN cities AS c2 ON
+	`to` = c2.label

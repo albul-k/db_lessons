@@ -12,6 +12,13 @@ INSERT INTO orders (user_id) VALUE (FLOOR(1 + (RAND() * 6)));
 INSERT INTO orders (user_id) VALUE (FLOOR(1 + (RAND() * 6)));
 INSERT INTO orders (user_id) VALUE (FLOOR(1 + (RAND() * 6)));
 
--- список пользователей которые сделали как минимум один заказ
-SELECT name, birthday_at FROM users
-	WHERE EXISTS (SELECT 1 FROM orders WHERE user_id = users.id);
+
+-- список пользователей которые сделали как минимум один заказ	
+SELECT
+	name
+FROM
+	users
+JOIN orders ON
+	user_id = users.id
+GROUP BY
+	name;

@@ -6,6 +6,9 @@ SELECT * FROM products;
 SELECT * FROM catalogs;
 
 SELECT
-	name,
-	(SELECT name FROM catalogs WHERE id = products.catalog_id) AS catalog
-	FROM products;
+	products.name,
+	catalogs.name
+FROM
+	products
+JOIN catalogs ON
+	catalogs.id = products.catalog_id;
