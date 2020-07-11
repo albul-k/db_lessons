@@ -44,7 +44,7 @@ SELECT
 	c2.name AS `to`
 FROM
 	flights
-INNER JOIN cities AS c1 ON
+JOIN cities AS c1 ON
 	`from` = c1.label
-INNER JOIN cities AS c2 ON
+JOIN cities AS c2 ON
 	`to` = c2.label
