@@ -4,6 +4,7 @@
 
 /*
 -- Сумма лайков 10 самых молодых пользователей
+-- с вложенным запросом
 SELECT
 	SUM(likes_amount) AS likes_total
 FROM
@@ -30,21 +31,22 @@ FROM
 	LIMIT 10) AS total;
 */
 
+-- через LEFT JOIN
 SELECT
 	SUM(likes_amount) AS likes_total
 FROM
 	(
 	SELECT
-		CONCAT(first_name, ' ', last_name) AS user_name, pr.birthday, COUNT(lk.target_id) AS likes_amount
+		CONCAT(first_name, ' ', last_name) AS user_name, profiles.birthday, COUNT(likes.target_id) AS likes_amount
 	FROM
 		users
-	JOIN profiles AS pr ON
-		pr.user_id = users.id
-	LEFT JOIN likes AS lk ON
-		lk.target_id = users.id
-		AND lk.target_type_id = 2
+	JOIN profiles ON
+		profiles.user_id = users.id
+	LEFT JOIN likes ON
+		likes.target_id = users.id
+		AND likes.target_type_id = 2
 	GROUP BY
-		user_name, pr.birthday
+		user_name, profiles.birthday
 	ORDER BY
-		pr.birthday DESC
+		profiles.birthday DESC
 	LIMIT 10) AS total;

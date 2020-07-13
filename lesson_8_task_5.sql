@@ -3,25 +3,57 @@
 (критерии активности необходимо определить самостоятельно).
 */
 
-/*
--- Вывод 10 пользователей, кто ставит меньше всего лайков, включая тех, кто лайки не ставил
-SELECT
-	CONCAT(first_name, ' ', last_name) AS user_name,
-	(SELECT COUNT(*) FROM likes WHERE users.id = user_id) AS likes_amount
-	FROM users
-	ORDER BY likes_amount
-	LIMIT 10;
-*/
 
-SELECT
+-- с вложенным запросом
+ SELECT
+	users.id,
 	CONCAT(first_name, ' ', last_name) AS user_name,
-	COUNT(lk.user_id) AS likes_amount
+	(
+	SELECT
+		COUNT(*)
+	FROM
+		likes
+	WHERE
+		users.id = user_id) AS likes_amount
 FROM
 	users
-LEFT JOIN likes AS lk ON
-	lk.user_id = users.id
+ORDER BY
+	likes_amount
+LIMIT 10;
+
+
+
+-- через LEFT JOIN
+ SELECT
+	users.id,
+	CONCAT(first_name, ' ', last_name) AS user_name,
+	COUNT(DISTINCT(likes.id)) AS likes_amount
+FROM
+	users
+LEFT JOIN likes ON
+	likes.user_id = users.id
 GROUP BY
-	user_name
+	users.id
+ORDER BY
+	likes_amount
+LIMIT 10;
+
+
+-- через LEFT JOIN + учет количества сообщений от пользователя и созданных им постов
+ SELECT
+	users.id,
+	CONCAT(first_name, ' ', last_name) AS user_name,
+	COUNT(DISTINCT(likes.id)) + COUNT(DISTINCT(messages.id)) + COUNT(DISTINCT(posts.id)) AS likes_amount
+FROM
+	users
+LEFT JOIN likes ON
+	likes.user_id = users.id
+LEFT JOIN messages ON
+	messages.from_user_id = users.id
+LEFT JOIN posts ON
+	posts.user_id = users.id
+GROUP BY
+	users.id
 ORDER BY
 	likes_amount
 LIMIT 10;
