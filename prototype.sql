@@ -1,3 +1,61 @@
+﻿CREATE TABLE profiles (
+	id SERIAL PRIMARY KEY,
+	phone VARCHAR(100) NOT NULL UNIQUE COMMENT "Телефон",
+	email VARCHAR(100) NOT NULL UNIQUE COMMENT "Электронная почта",
+	-- birthday DATE COMMENT "Дата рождения",
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+) COMMENT "Профиль пользователя";
+
+CREATE TABLE profiles_settings (
+	profile_id INT UNSIGNED NOT NULL,
+	subscription_id 
+	subscription_ends_at DATETIME,
+	offer_by_sms BOOLEAN,
+	offer_by_email BOOLEAN,
+	offer_by_push BOOLEAN,
+	myivi_by_sms BOOLEAN,
+	myivi_by_email BOOLEAN,
+	myivi_by_push BOOLEAN,
+	newitems_by_sms BOOLEAN,
+	newitems_by_email BOOLEAN,
+	newitems_by_push BOOLEAN,
+	news_by_email BOOLEAN,
+	news_by_push BOOLEAN,
+	PRIMARY KEY (profile_id) COMMENT ""
+) COMMENT "Настройки профиля";
+
+ALTER TABLE profiles_settings
+	ADD CONSTRAINT messages_from_user_id_fk FOREIGN KEY (from_user_id) REFERENCES users(id),
+	ADD CONSTRAINT messages_to_user_id_fk FOREIGN KEY (to_user_id) REFERENCES users(id);
+
+profiles_purchases
+	profile_id
+	media_id
+	created_at
+	updated_at
+
+profiles_devices
+	profile_id
+	device_type_id
+	hash
+	created_at
+	updated_at
+
+profiles_views_list
+	profile_id
+	media_id
+	created_at
+	updated_at
+
+profiles_wishes_list
+	profile_id
+	media_id
+	created_at
+	updated_at
+
+device_types
+
 media
 	id
 	media_type_id
@@ -52,59 +110,7 @@ media_types
 	created_at
 	updated_at
 
-users
-	id
-	number
-	email
-	profile_name
-	created_at
-	updated_at
-
-user_settings
-	user_id
-	subscription_id
-	subscription_ends_at
-	subscription_updated_at
-	offer_by_sms
-	offer_by_email
-	offer_by_push
-	myivi_by_sms
-	myivi_by_email
-	myivi_by_push
-	newitems_by_sms
-	newitems_by_email
-	newitems_by_push
-	news_by_email
-	news_by_push
-
 subscription
 	id
 	created_at
 	updated_at
-
-user_purchases
-	user_id
-	media_id
-	created_at
-	updated_at
-
-user_devices
-	user_id
-	device_type_id
-	hash
-	created_at
-	updated_at
-
-user_views_list
-	user_id
-	media_id
-	created_at
-	updated_at
-
-user_wishes_list
-	user_id
-	media_id
-	created_at
-	updated_at
-
-device_types
