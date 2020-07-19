@@ -10,9 +10,9 @@ RETURNS VARCHAR(255) DETERMINISTIC
 BEGIN
 	DECLARE res VARCHAR(255);
 	
-	IF (time_now > "6:00:00") AND (time_now <= "12:00:00") THEN
+	IF (time_now > TIME("6:00:00")) AND (time_now <= TIME("12:00:00")) THEN
 		SET	res = "Доброе утро";
-	ELSEIF (time_now > "12:00:00") AND (time_now <= "18:00:00") THEN
+	ELSEIF (time_now > TIME("12:00:00")) AND (time_now <= TIME("18:00:00")) THEN
 		SET	res = "Добрый вечер";
 	ELSE
 		SET	res = "Доброй ночи";
