@@ -1,28 +1,29 @@
-/*
-2. Задание на оконные функции
-Построить запрос, который будет выводить следующие столбцы:
-имя группы
-среднее количество пользователей в группах
-самый молодой пользователь в группе
-самый старший пользователь в группе
-общее количество пользователей в группе
-всего пользователей в системе
-отношение в процентах (общее количество пользователей в группе / всего пользователей в системе) * 100
+п»ї/*
+2. Р—Р°РґР°РЅРёРµ РЅР° РѕРєРѕРЅРЅС‹Рµ С„СѓРЅРєС†РёРё
+РџРѕСЃС‚СЂРѕРёС‚СЊ Р·Р°РїСЂРѕСЃ, РєРѕС‚РѕСЂС‹Р№ Р±СѓРґРµС‚ РІС‹РІРѕРґРёС‚СЊ СЃР»РµРґСѓСЋС‰РёРµ СЃС‚РѕР»Р±С†С‹:
+РёРјСЏ РіСЂСѓРїРїС‹
+СЃСЂРµРґРЅРµРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ РІ РіСЂСѓРїРїР°С…
+СЃР°РјС‹Р№ РјРѕР»РѕРґРѕР№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РІ РіСЂСѓРїРїРµ
+СЃР°РјС‹Р№ СЃС‚Р°СЂС€РёР№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РІ РіСЂСѓРїРїРµ
+РѕР±С‰РµРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ РІ РіСЂСѓРїРїРµ
+РІСЃРµРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ РІ СЃРёСЃС‚РµРјРµ
+РѕС‚РЅРѕС€РµРЅРёРµ РІ РїСЂРѕС†РµРЅС‚Р°С… (РѕР±С‰РµРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ РІ РіСЂСѓРїРїРµ / РІСЃРµРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ РІ СЃРёСЃС‚РµРјРµ) * 100
 */
 
 SELECT DISTINCT
 	communities.id,
 	communities.name,
-	-- среднее количество пользователей в группах
+	-- РЅРµ РїРѕРЅСЏР» РєР°Рє РїРѕСЃС‡РёС‚Р°С‚СЊ СЃСЂРµРґРЅРµРµ РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ РІ РіСЂСѓРїРїР°С…
 	MAX(profiles.birthday) OVER w AS birthday_max,
 	MIN(profiles.birthday) OVER w AS birthday_min,
 	COUNT(communities_users.user_id) OVER w AS total_in_group,
-	COUNT(communities_users.user_id) OVER() AS total,
-	COUNT(communities_users.user_id) OVER w / COUNT(communities_users.user_id) OVER() * 100 AS "%%"
+	COUNT(profiles.user_id) OVER() AS total,
+	COUNT(communities_users.user_id) OVER w / COUNT(profiles.user_id) OVER() * 100 AS "%%"
 FROM
 	communities
 	LEFT JOIN communities_users ON
 		communities_users.community_id = communities.id
 	LEFT JOIN profiles ON
 		profiles.user_id = communities_users.user_id
-	WINDOW w AS (PARTITION BY communities.id);
+	WINDOW w AS (PARTITION BY communities.id),
+	u AS (PARTITION BY profiles.user_id);

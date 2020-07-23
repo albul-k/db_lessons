@@ -1,8 +1,8 @@
-/*
-3. (по желанию) Задание на денормализацию
-Разобраться как построен и работает следующий запрос:
-Найти 10 пользователей, которые проявляют наименьшую активность
-в использовании социальной сети.
+п»ї/*
+3. (РїРѕ Р¶РµР»Р°РЅРёСЋ) Р—Р°РґР°РЅРёРµ РЅР° РґРµРЅРѕСЂРјР°Р»РёР·Р°С†РёСЋ
+Р Р°Р·РѕР±СЂР°С‚СЊСЃСЏ РєР°Рє РїРѕСЃС‚СЂРѕРµРЅ Рё СЂР°Р±РѕС‚Р°РµС‚ СЃР»РµРґСѓСЋС‰РёР№ Р·Р°РїСЂРѕСЃ:
+РќР°Р№С‚Рё 10 РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№, РєРѕС‚РѕСЂС‹Рµ РїСЂРѕСЏРІР»СЏСЋС‚ РЅР°РёРјРµРЅСЊС€СѓСЋ Р°РєС‚РёРІРЅРѕСЃС‚СЊ
+РІ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРё СЃРѕС†РёР°Р»СЊРЅРѕР№ СЃРµС‚Рё.
 
 SELECT users.id,
 COUNT(DISTINCT messages.id) +
@@ -19,28 +19,40 @@ GROUP BY users.id
 ORDER BY activity
 LIMIT 10;
 
-Правильно-ли он построен?
-Какие изменения, включая денормализацию, можно внести в структуру БД
-чтобы существенно повысить скорость работы этого запроса?
+РџСЂР°РІРёР»СЊРЅРѕ-Р»Рё РѕРЅ РїРѕСЃС‚СЂРѕРµРЅ?
+РљР°РєРёРµ РёР·РјРµРЅРµРЅРёСЏ, РІРєР»СЋС‡Р°СЏ РґРµРЅРѕСЂРјР°Р»РёР·Р°С†РёСЋ, РјРѕР¶РЅРѕ РІРЅРµСЃС‚Рё РІ СЃС‚СЂСѓРєС‚СѓСЂСѓ Р‘Р”
+С‡С‚РѕР±С‹ СЃСѓС‰РµСЃС‚РІРµРЅРЅРѕ РїРѕРІС‹СЃРёС‚СЊ СЃРєРѕСЂРѕСЃС‚СЊ СЂР°Р±РѕС‚С‹ СЌС‚РѕРіРѕ Р·Р°РїСЂРѕСЃР°?
 */
 
--- может добавить триггер с подсчетом показателя активности... ??
--- можно, в принципе, и в таблицу
-DELIMITER //
-CREATE TRIGGER messages_activity_on_insert BEFORE INSERT ON messages
-FOR EACH ROW
-BEGIN
-  SET NEW.total = OLD.total + 1;
-END//
+-- РґРѕР±Р°РІР»СЏРµРј С‚СЂРёРіРіРµСЂС‹ РїРѕСЃР»Рµ РІСЃС‚Р°РІРєРё РІ С‚Р°Р±Р»РёС†С‹ messages, likes, media
+-- СѓРІРµР»РёС‡РёРІР°РµРј activity РЅР° РµРґРёРЅРёС†Сѓ РїСЂРё РєР°Р¶РґРѕР№ РІСЃС‚Р°РІРєРµ
 
-CREATE TRIGGER likes_activity_on_insert BEFORE INSERT ON likes
+CREATE TRIGGER messages_activity_on_insert
+AFTER INSERT ON messages
 FOR EACH ROW
-BEGIN
-  SET NEW.total = OLD.total + 1;
-END//
-
-CREATE TRIGGER media_activity_on_insert BEFORE INSERT ON media
+	UPDATE users
+		SET activity = activity + 1;
+	WHERE users.id = messages.from_user_id;
+  
+CREATE TRIGGER likes_activity_on_insert
+AFTER INSERT ON likes
 FOR EACH ROW
-BEGIN
-  SET NEW.total = OLD.total + 1;
-END//
+	UPDATE users
+		SET activity = activity + 1;
+	WHERE users.id = likes.user_id;
+  
+CREATE TRIGGER media_activity_on_insert
+AFTER INSERT ON media
+FOR EACH ROW
+	UPDATE users
+		SET activity = activity + 1;
+	WHERE users.id = media.user_id;
+   
+-- С‚РѕРіРґР° Р·Р°РїСЂРѕСЃ РЅР° Р°РєС‚РёРІРЅРѕСЃС‚СЊ СЃРІРѕРґРёС‚СЃСЏ Рє СЃР»РµРґСѓСЋС‰РµРјСѓ
+SELECT
+	activity
+FROM
+	users
+ORDER BY
+	activity
+LIMIT 10;
